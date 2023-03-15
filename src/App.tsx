@@ -7,7 +7,7 @@ import Home from './pages/Home'
 function App() {
   return (
     <div className="App">
-<BrowserRouter>
+      <BrowserRouter>
         <Routes>
           <Route path="/validated" element={<h3>Valid Input</h3>}></Route>
           <Route path="/" element={<Home />}>
