@@ -22,8 +22,8 @@
 
 .card {
   padding: 0.8em 2em;
-  border: solid red 1px;
   border-radius: 1rem;
+  border: dashed 2px white;
 
 }
 .card > h3{

@@ -1,15 +1,25 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import Card from "../components/Card";
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 function Duplicates() {
   const navigate = useNavigate()
   const location = useLocation();
-  const [input, setInput] = useState(location.state.originalInput);
+  const originalInput = location.state.originalInput
+  const [input, setInput] = useState(originalInput);
   const [hasNoDuplicates, setHasNoDuplicates] = useState(false)
   const [isFirstRender, setIsFirstRender] = useState(false)
+  const [charColors, setCharColors] = useState({})
 
-  function Prompt() {
+  const randomHex = (): string =>
+    "#66" + Math.floor(Math.random() * 16777215).toString(16); // #66 to add transparency to the color
+
+  useEffect(() => {
+    const charColors = Object.fromEntries([...originalInput].map(x => [x, randomHex()]));
+    setCharColors(charColors)
+  }, [])
+
+  function Message() {
     return (
       <div>
         {hasNoDuplicates
@@ -28,19 +38,21 @@ function Duplicates() {
 
       {
         isFirstRender
-          ? <Prompt />
+          ? <Message />
           : null
       }
       <div className="cards">
-        {Array.from(input).map((char, index) => <Card
-          value={char}
-          key={index}
-          index={index}
-          input={input}
-          setInput={setInput}
-          setHasNoDuplicates={setHasNoDuplicates}
-          setFirstRender={setIsFirstRender}
-        />)}
+        {Array.from(input).map((char, index) =>
+          <Card
+            value={char}
+            key={index}
+            index={index}
+            input={input}
+            setInput={setInput}
+            setHasNoDuplicates={setHasNoDuplicates}
+            setFirstRender={setIsFirstRender}
+            charColors={charColors}
+          />)}
       </div>
     </div>
   )
