@@ -2,17 +2,17 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Home = () => {
-  const [input, setInput] = useState("");
+  const [originalInput, setOriginalInput] = useState("");
   const navigate = useNavigate();
 
   const handleChange = (ev: React.FormEvent<HTMLInputElement>) => {
-    setInput(ev.currentTarget.value);
+    setOriginalInput(ev.currentTarget.value.trim());
   }
 
   const handleSubmit = (ev: React.SyntheticEvent) => {
     ev.preventDefault();
-    validateInput(input)
-      ? navigate("/validated")
+    validateInput(originalInput)
+      ? navigate("/validated", { state: { originalInput } })
       : alert("Can't process empty input")
   }
 
@@ -27,7 +27,7 @@ const Home = () => {
       </h1>
 
       <form onSubmit={ev => handleSubmit(ev)}>
-        <input type="text" value={input} onChange={ev => handleChange(ev)} />
+        <input type="text" value={originalInput} onChange={ev => handleChange(ev)} />
         <button type="submit">Change Your LOIF</button>
       </form>
     </>

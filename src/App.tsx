@@ -3,13 +3,14 @@ import reactLogo from './assets/react.svg'
 import './App.css'
 import { Routes, Route, Router, BrowserRouter } from 'react-router-dom'
 import Home from './pages/Home'
+import Duplicates from './pages/Duplicates'
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path="/validated" element={<h3>Valid Input</h3>}></Route>
+          <Route path="/validated" element={<Duplicates />}></Route>
           <Route path="/" element={<Home />}>
           </Route>
         </Routes>
