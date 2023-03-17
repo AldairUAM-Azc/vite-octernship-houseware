@@ -1,8 +1,11 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import Card from "../components/Card";
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
+import { Fireworks } from "@fireworks-js/react"
+import type { FireworksHandlers } from "@fireworks-js/react";
 
-function Duplicates() {
+const Duplicates = () => {
+  const ref = useRef<FireworksHandlers>(null)
   const navigate = useNavigate()
   const location = useLocation();
   const originalInput = location.state.originalInput
@@ -15,32 +18,49 @@ function Duplicates() {
     "#66" + Math.floor(Math.random() * 16777215).toString(16); // #66 to add transparency to the color
 
   useEffect(() => {
+    ref.current.stop() //stop fireworks, they start by default
     const charColors = Object.fromEntries([...originalInput].map(x => [x, randomHex()]));
-    setCharColors(charColors)
+    setCharColors(charColors) // charColors maps a single character to a random color
   }, [])
+
+  useEffect(() => {
+    if (hasNoDuplicates) {
+      ref.current.start()
+    }
+  }, [hasNoDuplicates])
 
   function Message() {
     return (
       <div>
         {hasNoDuplicates
           ? <p>NO DUPLICATES 😁</p>
-          : <p>Still Duplicates 😭</p>}
+          : <p>STILL DUPLICATES 😭</p>}
       </div>
     )
   }
 
   return (
     <div>
+      <Fireworks
+        ref={ref}
+        options={{ opacity: 0.5 }}
+        style={{
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          position: "fixed",
+        }} />
+
       <button onClick={() => navigate(-1)}> ⬅️ GO BACK</button>
-      <h1>You're in the second page</h1>
+
       <p>Heres your ORIGINAL input {location.state.originalInput}</p>
       <p>Heres your CURRENT input {input}</p>
 
-      {
-        isFirstRender
-          ? <Message />
-          : null
-      }
+      {isFirstRender
+        ? <Message />
+        : null}
+
       <div className="cards">
         {Array.from(input).map((char, index) =>
           <Card
